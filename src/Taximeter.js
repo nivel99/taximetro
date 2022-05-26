@@ -47,29 +47,34 @@ export default class Taximeter extends Component {
         time: (new Date() - this.state.startDate) / 1000,
       })
     }, 1000)
-    this.watcher = navigator.geolocation.watchPosition((position) => {
-      if (this.state.lastLocation) {
-        const addDistance = distance(
-          position.coords.longitude,
-          position.coords.latitude,
-          this.state.lastLocation.longitude,
-          this.state.lastLocation.latitude
-        )
-        this.setState({
-          tickDistance: this.state.tickDistance + addDistance,
-          distance: this.state.distance + addDistance,
-        })
-        if (this.state.tickDistance >= this.props.params.tickDistance) {
-          this.addTick(Math.floor(this.state.tickDistance / this.props.params.tickDistance))
+
+    setInterval(() => {
+      this.watcher = navigator.geolocation.getCurrentPosition((position) => {
+        if (this.state.lastLocation) {
+          const addDistance = distance(
+            position.coords.longitude,
+            position.coords.latitude,
+            this.state.lastLocation.longitude,
+            this.state.lastLocation.latitude
+          )
+          this.setState({
+            tickDistance: this.state.tickDistance + addDistance,
+            distance: this.state.distance + addDistance,
+          })
+          if (this.state.tickDistance >= this.props.params.tickDistance) {
+            this.addTick(Math.floor(this.state.tickDistance / this.props.params.tickDistance))
+          }
         }
-      }
-      this.setState({lastLocation: position.coords})
-    }, (err) => {
-      alert(err.message)
-    }, {
-      enableHighAccuracy: true,
-      maximumAge: 0,
-    });
+        this.setState({lastLocation: position.coords})
+      }, (err) => {
+        alert(err.message)
+      }, {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+      });  
+    }, 5000);
+
+    
   }
 
   componentWillUnmount() {

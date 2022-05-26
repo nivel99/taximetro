@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import './Prepare.css'
 
 const defaultParameters = {
-  tickAmount: 3.26,
-  initialAmount: 32.6,
+  tickAmount: 200,
+  initialAmount: 3600,
   tickDistance: 200,
   tickTime: 60,
   nightIncrease: 20,
